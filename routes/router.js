@@ -1,6 +1,6 @@
 const express=require("express")
 const { adminlogin, addpatient, getpatientdetails, editPatientDetails, deletePatientdetails, getSinglepatient,
-     addstaff, getStaffs, editstaff, deletestaff, getsingleStaff, patientregister, patientlogin } = require("../controllers/logic")
+     addstaff, getStaffs, editstaff, deletestaff, getsingleStaff, patientregister, patientlogin ,bookAppointment, slot} = require("../controllers/logic")
 
 const router=new express.Router()
 
@@ -43,4 +43,7 @@ router.post("/patient/register",patientregister)
 
 //patient login
 router.post("/patient/login",patientlogin)
+
+//book appointment
+router.put('/appointment/booking/:id',slot)
 module.exports=router

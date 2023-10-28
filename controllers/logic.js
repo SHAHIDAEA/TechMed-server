@@ -1,4 +1,4 @@
-const { admins, patients, staffs } = require("../models/collection")
+const { admins, patients, staffs, appointments } = require("../models/collection")
 
 
 //admin login
@@ -257,6 +257,43 @@ const patientlogin = (req, res) => {
     })
 }
 
+const bookAppointment=(req,res)=>{
+    const{pId,sId}=req.body
+    appointments.findOne({_id:sId}).then(data=>{
+        if(data){
+            res.status(404).json({
+                message: "Already booked",
+                status: true,
+                statusCode: 404,
+            })
+
+        }else{
+            staffs.findOne({_id:pId}).then(staff=>{
+                if(staff){
+                    newAppointment =new appointments({
+                        pId,
+                        sId,
+                        docname:staff.docname,
+                        consultationfee:staff.consultationfee,
+                        appointments:staff.appointments,
+                        slots_available:staff.slots_available
+                    
+                    })
+                }
+            })
+        }
+    })
+}
+const slot=(req,res)=>{
+    var click=1
+    const{id}=req.params
+    staffs.findOne({_id:id}).then(data=>{
+        if(data){
+            data.slots_available=data.slots_available-click
+            data.appointments=data.appointments+click
+        }
+    })
+}
 
 module.exports = { adminlogin, addpatient,getpatientdetails,editPatientDetails,deletePatientdetails ,getSinglepatient,addstaff,
-    getStaffs,editstaff,deletestaff,getsingleStaff,patientregister,patientlogin}
+    getStaffs,editstaff,deletestaff,getsingleStaff,patientregister,patientlogin,bookAppointment,slot}
